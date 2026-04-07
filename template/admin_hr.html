@@ -1,0 +1,123 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+
+<style>
+
+/* ===== TITLE ===== */
+.title{
+    font-size:28px;
+    font-weight:bold;
+    color:#2563eb;
+    margin-bottom:25px;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-box{
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:300px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+/* ===== TABLE ===== */
+.table{
+    width:95%;
+    margin:auto;
+    border-collapse:collapse;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.table th{
+    background:#0d2a5e;
+    color:white;
+    padding:14px;
+    font-size:15px;
+}
+
+.table td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+/* ===== HOVER ===== */
+.table tr:hover{
+    background:#f1f5f9;
+}
+
+/* ===== BUTTONS ===== */
+.delete-btn{
+    background:#ef4444;
+    color:white;
+    padding:7px 14px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+
+</style>
+
+<div class="title">HR Management</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search HR by name...">
+</div>
+
+<!-- TABLE -->
+<table class="table" id="hrTable">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+
+    {% for hr in hrs %}
+    <tr>
+        <td>{{ hr.id }}</td>
+        <td>{{ hr.name }}</td>
+        <td>{{ hr.email }}</td>
+        <td>
+            <a href="{% url 'delete_hr' hr.id %}">
+                <button class="delete-btn">Delete</button>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let input = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#hrTable tr");
+
+    rows.forEach((row, index) => {
+        if(index === 0) return; // skip header
+
+        let name = row.children[1].textContent.toLowerCase();
+
+        if(name.includes(input)){
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+</script>
+
+{% endblock %}

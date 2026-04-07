@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Give Feedback</title>
+
+<style>
+
+body{
+font-family:Arial;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:#e5e7eb;
+}
+
+/* CARD */
+.card{
+background:white;
+padding:40px 50px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+width:380px;
+}
+
+/* TITLE */
+h2{
+margin-bottom:20px;
+color:#1e293b;
+}
+
+/* STARS */
+.stars{
+display:flex;
+justify-content:center;
+gap:12px;
+margin:20px 0;
+}
+
+.star{
+font-size:35px;
+cursor:pointer;
+color:#ccc;
+transition:0.3s;
+}
+
+/* Active stars */
+.star.active{
+color:#fbbf24;
+transform:scale(1.2);
+}
+
+/* BUTTON */
+button{
+padding:10px 25px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:16px;
+margin-top:10px;
+}
+
+button:hover{
+background:#1e40af;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Rate HireSmart ⭐</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="stars">
+<span class="star" data-value="1">★</span>
+<span class="star" data-value="2">★</span>
+<span class="star" data-value="3">★</span>
+<span class="star" data-value="4">★</span>
+<span class="star" data-value="5">★</span>
+</div>
+
+<input type="hidden" name="rating" id="rating">
+
+<button type="submit">Submit</button>
+
+</form>
+
+</div>
+
+<script>
+
+const stars = document.querySelectorAll(".star");
+const ratingInput = document.getElementById("rating");
+
+stars.forEach((star, index) => {
+
+    // CLICK
+    star.addEventListener("click", () => {
+        ratingInput.value = index + 1;
+
+        stars.forEach(s => s.classList.remove("active"));
+
+        for(let i=0; i<=index; i++){
+            stars[i].classList.add("active");
+        }
+    });
+
+    // HOVER
+    star.addEventListener("mouseover", () => {
+        stars.forEach(s => s.classList.remove("active"));
+
+        for(let i=0; i<=index; i++){
+            stars[i].classList.add("active");
+        }
+    });
+
+    // MOUSE OUT
+    star.addEventListener("mouseout", () => {
+        let current = ratingInput.value;
+
+        stars.forEach(s => s.classList.remove("active"));
+
+        for(let i=0; i<current; i++){
+            stars[i].classList.add("active");
+        }
+    });
+
+});
+
+</script>
+
+</body>
+</html>

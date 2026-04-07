@@ -1,0 +1,157 @@
+{% extends 'base_student.html' %}
+
+{% block content %}
+
+<h2 class="title">Your Resume</h2>
+
+<div class="resume-box">
+
+<!-- HEADER -->
+<div class="header">
+    <h2>{{ resume.name }}</h2>
+    <p>{{ resume.education }}</p>
+</div>
+
+<!-- TECH SKILLS -->
+<div class="section">
+    <h3>Technical Skills</h3>
+    <div class="tags">
+        {% for skill in skills_list %}
+        <span>{{ skill }}</span>
+        {% empty %}
+        <span>No Skills Added</span>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- SOFT SKILLS -->
+<div class="section">
+    <h3>Soft Skills</h3>
+    <div class="tags">
+        {% for skill in soft_skills_list %}
+        <span>{{ skill }}</span>
+        {% empty %}
+        <span>Not Added</span>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- EXPERIENCE -->
+<div class="section">
+    <h3>Experience</h3>
+    <p>{{ resume.experience }} years</p>
+</div>
+
+<!-- PROJECT -->
+<div class="section">
+    <h3>Projects</h3>
+    <p>{{ resume.projects|default:"No Projects Added" }}</p>
+</div>
+
+</div>
+
+<style>
+
+/* ===== TITLE ===== */
+.title{
+text-align:center;
+margin-bottom:30px;
+color:#1e3a8a;
+}
+
+/* ===== MAIN BOX ===== */
+.resume-box{
+width:650px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ===== HEADER ===== */
+.header{
+border-bottom:2px solid #2563eb;
+padding-bottom:10px;
+margin-bottom:20px;
+}
+
+.header h2{
+margin:0;
+color:#0f172a;
+}
+
+.header p{
+color:#64748b;
+}
+
+/* ===== SECTION ===== */
+.section{
+position:relative;
+padding-left:25px;
+margin-bottom:25px;
+}
+
+/* 🔥 DOT */
+.section::before{
+content:"";
+position:absolute;
+left:0;
+top:5px;
+width:10px;
+height:10px;
+background:#2563eb;
+border-radius:50%;
+}
+
+/* 🔥 LINE */
+.section::after{
+content:"";
+position:absolute;
+left:4px;
+top:20px;
+width:2px;
+height:100%;
+background:#cbd5f5;
+}
+
+/* LAST LINE REMOVE */
+.section:last-child::after{
+display:none;
+}
+
+/* ===== TAGS ===== */
+.tags{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.tags span{
+background:#e0edff;
+color:#2563eb;
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+}
+
+/* ===== TEXT ===== */
+.section p{
+margin:0;
+color:#334155;
+}
+.header h2{
+    margin:0;
+    color:#0f172a;
+    text-align:center;
+}
+
+.header p{
+    color:#64748b;
+    margin-top:5px;
+    text-align:center;
+}
+
+</style>
+
+{% endblock %}

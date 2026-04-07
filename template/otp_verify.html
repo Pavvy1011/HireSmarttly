@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="card">
+    <h2>Verify Your Email</h2>
+
+    <!-- OTP Verify Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="otp" placeholder="Enter 6 Digit OTP" required>
+        <button type="submit">Verify OTP</button>
+    </form>
+
+    {% if error %}
+        <p style="color:red; margin-top:10px;">{{ error }}</p>
+    {% endif %}
+
+    <br>
+
+    <!-- Resend OTP Button -->
+    <form action="{% url 'resend_otp' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="resend-btn">Resend OTP</button>
+    </form>
+
+</div>
+
+</body>
+</html>

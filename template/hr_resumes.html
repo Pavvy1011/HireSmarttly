@@ -1,0 +1,152 @@
+{% extends 'base_hr.html' %}
+
+{% block content %}
+
+<style>
+
+.page-title{
+text-align:center;
+color:#2563eb;
+margin-bottom:25px;
+font-size:32px;
+font-weight:bold;
+}
+
+/* Filter section */
+
+.filter-box{
+text-align:center;
+margin-bottom:30px;
+}
+
+.filter-box input,
+.filter-box select{
+padding:8px;
+margin:5px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+.filter-btn{
+background:#0d2a5e;
+color:white;
+padding:8px 18px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.filter-btn:hover{
+background:#1e40af;
+}
+
+/* Table */
+
+table{
+width:95%;
+margin:auto;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+th{
+background:#0d2a5e;
+color:white;
+padding:12px;
+text-align:center;
+}
+
+td{
+padding:12px;
+text-align:center;
+border-top:1px solid #eee;
+}
+
+tr:nth-child(even){
+background:#f3f4f6;
+}
+
+tr:hover{
+background:#eef2ff;
+}
+
+.view-btn{
+background:#0d2a5e;
+color:white;
+padding:6px 14px;
+border-radius:6px;
+text-decoration:none;
+}
+
+.view-btn:hover{
+background:#1e40af;
+}
+
+</style>
+
+
+<h2 class="page-title">Student Resumes</h2>
+
+
+<div class="filter-box">
+
+<form method="GET">
+
+<input type="text" name="skill" placeholder="Search Skill">
+
+<select name="exp">
+<option value="">Experience</option>
+<option value="1">1+ Year</option>
+<option value="2">2+ Year</option>
+<option value="3">3+ Year</option>
+</select>
+
+<button type="submit" class="filter-btn">Filter</button>
+
+</form>
+
+</div>
+
+
+<table>
+
+<tr>
+<th>Student</th>
+<th>Skill Match</th>
+<th>Experience</th>
+<th>Score</th>
+<th>View Resume</th>
+</tr>
+
+{% for r in resumes %}
+
+<tr>
+
+<td>{{ r.student.name }}</td>
+
+<td>{{ r.skills }}</td>
+
+<td>{{ r.experience }} Years</td>
+
+<td>⭐ {{ r.score }}</td>
+
+<td>
+
+{% if r.resume %}
+<a href="{{ r.resume.url }}" class="view-btn">View Resume</a>
+{% else %}
+<span style="color:red;">No Resume</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

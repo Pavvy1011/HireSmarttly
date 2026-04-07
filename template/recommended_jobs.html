@@ -1,0 +1,110 @@
+{% extends 'base_student.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+.page-title{
+font-size:28px;
+margin-bottom:25px;
+color:#1f2f46;
+}
+
+/* Table */
+
+.job-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.job-table th{
+background:#1f2f46;
+color:white;
+padding:14px;
+text-align:left;
+}
+
+.job-table td{
+padding:14px;
+border-bottom:1px solid #ddd;
+}
+
+.job-table tr:hover{
+background:#f3f4f6;
+}
+
+/* Match Badge */
+
+.match{
+background:#22c55e;
+color:white;
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+}
+
+/* Apply Button */
+
+.apply-btn{
+background:#2563eb;
+color:white;
+padding:8px 14px;
+border-radius:6px;
+text-decoration:none;
+font-size:14px;
+}
+
+.apply-btn:hover{
+background:#1e40af;
+}
+
+</style>
+
+
+<h2 class="page-title">Recommended Jobs For You</h2>
+
+<table class="job-table">
+
+<tr>
+<th>Job Title</th>
+<th>Company</th>
+<th>Match %</th>
+<th>Apply</th>
+</tr>
+
+{% for item in job_scores %}
+
+<tr>
+
+<td>{{ item.job.title }}</td>
+
+<td>{{ item.job.company }}</td>
+
+<td>
+<span class="match">{{ item.score }}%</span>
+</td>
+
+<td>
+<a href="{% url 'apply_job' item.job.id %}" class="apply-btn">
+Apply
+</a>
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4">No recommended jobs found</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

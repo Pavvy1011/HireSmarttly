@@ -1,0 +1,295 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* ===== GLOBAL ===== */
+body{
+    background:#f8fbff;
+    font-family:'Segoe UI',sans-serif;
+    color:#1e293b;
+    margin:0;
+}
+
+/* ===== HEADER ===== */
+.header{
+    background:linear-gradient(135deg,#e0f2fe,#dbeafe);
+    padding:20px;
+    border-radius:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* ===== BUTTON ===== */
+.btn{
+    background:#2563eb;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    transition:0.3s;
+}
+.btn:hover{
+    background:#1e40af;
+}
+
+/* ===== CARDS ===== */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:20px;
+    margin-bottom:25px;
+}
+.card{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,0.05);
+    transition:0.3s;
+    border:1px solid #e2e8f0;
+}
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(37,99,235,0.15);
+}
+.card h3{
+    color:#1e3a8a;
+    margin-bottom:10px;
+}
+.card p{
+    font-size:30px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+/* ===== BOX ===== */
+.box{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.05);
+    border:1px solid #e2e8f0;
+    transition:0.3s;
+}
+.box:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* ===== GRID ===== */
+.chart-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+/* ===== TITLES ===== */
+h2{
+    color:#1e3a8a;
+}
+h3{
+    color:#2563eb;
+    margin-bottom:10px;
+}
+
+/* ===== CHART ===== */
+canvas{
+    height:220px !important;
+    margin-top:10px;
+}
+#skillChart{
+    display:block;
+    margin:0 auto; /* Center pie chart */
+}
+
+/* ===== LIST ===== */
+ul{
+    padding:0;
+}
+ul li{
+    list-style:none;
+    background:#f1f5f9;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+}
+
+/* ===== RECENT ACTIVITY ===== */
+.box p{
+    margin:6px 0;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{
+    width:6px;
+}
+::-webkit-scrollbar-thumb{
+    background:#cbd5f5;
+    border-radius:10px;
+}
+/* ===== CHART ===== */
+canvas{
+    height:220px !important;
+    margin-top:10px;
+}
+
+/* Center pie chart and enlarge */
+#skillChart{
+    display:block;
+    margin:0 auto;
+    height:300px !important;   /* bigger height */
+    width:300px !important;    /* bigger width */
+}
+</style>
+
+<!-- HEADER -->
+<div class="header">
+    <h2>Admin Dashboard</h2>
+    <div>
+        <a href="?filter=week" class="btn">Week</a>
+        <a href="?filter=month" class="btn">Month</a>
+        <a href="?filter=year" class="btn">Year</a>
+        <a href="{% url 'export_excel' %}" class="btn">Export Resume</a>
+    </div>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+    <div class="card"><h3>Resumes</h3><p>{{ total_resumes }}</p></div>
+    <div class="card"><h3>Jobs</h3><p>{{ total_jobs }}</p></div>
+    <div class="card"><h3>Students</h3><p>{{ total_students }}</p></div>
+    <div class="card"><h3>Shortlisted</h3><p>{{ total_shortlisted }}</p></div>
+</div>
+
+<!-- CHARTS -->
+ <div class="chart-grid">
+    <div class="box">
+        <h3>Applications</h3>
+        <canvas id="appChart"></canvas>
+    </div>
+    <div class="box">
+        <h3>Skills</h3>
+        <canvas id="skillChart"></canvas>
+    </div>
+</div>
+<div class="chart-grid">
+    <div class="box">
+        <h3>Resume Trend</h3>
+        <canvas id="resumeChart"></canvas>
+    </div>
+    <div class="box">
+        <h3>Job Trend</h3>
+        <canvas id="jobChart"></canvas>
+    </div>
+</div>
+
+
+
+<!-- GROWTH -->
+<div class="box">
+    <h3>📈 Growth</h3>
+    <p>{{ growth }}%</p>
+    <h3>🧠 Top Skill</h3>
+    <p>{{ top_skill }}</p>
+</div>
+
+<!-- TOP CANDIDATES -->
+<div class="box">
+    <h3>⭐ Top Candidates</h3>
+    {% for r in top_students %}
+    <div style="display:flex;justify-content:space-between;">
+        <span>{{ r.name }}</span>
+        <span>{{ r.experience }} yrs</span>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+<script>
+// DATA
+let resumeData = JSON.parse('{{ resume_data|escapejs }}');
+let jobData = JSON.parse('{{ job_data|escapejs }}');
+let appData = JSON.parse('{{ application_data|escapejs }}');
+let skills = JSON.parse('{{ skills|escapejs }}');
+
+// RESUME
+new Chart(document.getElementById("resumeChart"), {
+    type: "line",
+    data: {
+        labels: resumeData.map(x => x.period),
+        datasets: [{
+            label: "Resumes",
+            data: resumeData.map(x => x.count),
+            borderColor: "#2563eb",
+            backgroundColor: "rgba(37,99,235,0.1)",
+            fill:true,
+            tension:0.4
+        }]
+    },
+    options: { animation:{duration:1200,easing:'easeOutQuart'} }
+});
+
+// JOB
+new Chart(document.getElementById("jobChart"), {
+    type: "bar",
+    data: {
+        labels: jobData.map(x => x.period),
+        datasets: [{
+            label: "Jobs",
+            data: jobData.map(x => x.count),
+            backgroundColor: "#34d399"
+        }]
+    },
+    options: { animation:{duration:1200,easing:'easeOutBounce'} }
+});
+
+// APPLICATION
+new Chart(document.getElementById("appChart"), {
+    type: "line",
+    data: {
+        labels: appData.map(x => x.period),
+        datasets: [{
+            label: "Applications",
+            data: appData.map(x => x.count),
+            borderColor: "#fbbf24",
+            backgroundColor:"rgba(251,191,36,0.15)",
+            fill:true,
+            tension:0.4
+        }]
+    },
+    options: { animation:{duration:1200,easing:'easeOutQuart'} }
+});
+
+// SKILLS PIE
+new Chart(document.getElementById("skillChart"), {
+    type: "pie",
+    data: {
+        labels: Object.keys(skills),
+        datasets: [{
+            data: Object.values(skills),
+            backgroundColor: [
+                "#60a5fa", // Blue
+                "#34d399", // Green
+                "#fbbf24", // Amber
+                "#f87171", // Coral
+                "#a78bfa", // Lavender
+                "#22d3ee"  // Aqua
+            ],
+    
+        }]
+    },
+    options: {
+        plugins:{legend:{position:'bottom'}},
+        animation:{duration:1500,easing:'easeOutElastic'}
+    }
+});
+</script>
+
+{% endblock %}

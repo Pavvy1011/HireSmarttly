@@ -1,0 +1,261 @@
+{% extends 'base_hr.html' %}
+
+{% block content %}
+
+<h2 style="text-align:center;color:#2563eb;">HR Messages</h2>
+
+<div class="chat-wrapper">
+
+<!-- Chat Messages -->
+<div class="chat-body" id="chatBody"></div>
+
+<!-- Chat Input -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="chat-input">
+
+        <!-- + ICON -->
+        <label for="fileUpload" class="file-icon">+</label>
+        <input type="file" id="fileUpload" name="file" hidden>
+
+        <!-- TEXT -->
+        <input type="text" name="message" placeholder="Type message...">
+
+        <!-- 🔥 FILE PREVIEW -->
+        <div id="filePreview"></div>
+
+        <!-- SEND -->
+        <button type="submit">➤</button>
+
+    </div>
+</form>
+
+</div>
+
+<style>
+
+/* Chat Box */
+.chat-wrapper{
+max-width:600px;
+margin:auto;
+margin-top:30px;
+background:white;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.15);
+display:flex;
+flex-direction:column;
+height:500px;
+}
+
+/* Messages */
+.chat-body{
+flex:1;
+padding:15px;
+overflow-y:auto;
+background:#f1f5f9;
+}
+
+/* Date Label */
+.date-label{
+display:block;
+width:fit-content;
+margin:15px auto;
+font-size:12px;
+color:#555;
+background:#e2e8f0;
+padding:5px 12px;
+border-radius:12px;
+text-align:center;
+}
+
+/* Message */
+.msg{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+margin-bottom:10px;
+}
+
+/* Bubble */
+.bubble{
+background:#0d2a5e;
+color:white;
+padding:10px 14px;
+border-radius:12px;
+max-width:80%;
+}
+
+/* File */
+.file-box{
+background:#e2e8f0;
+padding:8px;
+border-radius:8px;
+margin-top:5px;
+}
+
+/* Time */
+.time{
+font-size:11px;
+color:#666;
+margin-top:3px;
+}
+
+/* Input */
+.chat-input{
+display:flex;
+align-items:center;
+padding:10px;
+background:white;
+border-top:1px solid #ddd;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.chat-input input[type="text"]{
+flex:1;
+padding:12px;
+border-radius:25px;
+border:1px solid #ccc;
+}
+
+/* + */
+.file-icon{
+width:35px;
+height:35px;
+border-radius:50%;
+background:#0d2a5e;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+}
+
+/* Send */
+.chat-input button{
+background:#0d2a5e;
+color:white;
+border:none;
+width:40px;
+height:40px;
+border-radius:50%;
+cursor:pointer;
+}
+
+/* 🔥 FILE PREVIEW STYLE */
+#filePreview{
+background:#e2e8f0;
+padding:6px 10px;
+border-radius:10px;
+font-size:12px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* ❌ remove */
+.remove-file{
+color:red;
+cursor:pointer;
+font-weight:bold;
+}
+
+</style>
+
+<!-- 🔥 REAL TIME SCRIPT -->
+
+<script>
+
+function formatDateLabel(dateStr){
+    let msgDate = new Date(dateStr);
+    let today = new Date();
+    let yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if(msgDate.toDateString() === today.toDateString()) return "Today";
+    if(msgDate.toDateString() === yesterday.toDateString()) return "Yesterday";
+
+    return msgDate.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function loadMessages(){
+
+    fetch("/messages-data/")
+    .then(res => res.json())
+    .then(data => {
+
+        let chat = document.getElementById("chatBody");
+        chat.innerHTML = "";
+
+        let lastDate = "";
+
+        data.messages.forEach(m => {
+
+            let dateLabel = formatDateLabel(m.full_date);
+
+            if(dateLabel !== lastDate){
+                chat.innerHTML += `<div class="date-label">${dateLabel}</div>`;
+                lastDate = dateLabel;
+            }
+
+            let msg = `
+<div style="background:white; padding:12px; border-radius:10px; margin-bottom:10px; box-shadow:0 5px 10px rgba(0,0,0,0.1); text-align:left;">
+
+    <p><strong>👤 Student:</strong> ${m.student_name}</p>
+    <p><strong>💼 Job:</strong> ${m.job_title}</p>
+    ${m.text ? `<p><strong>💬 Message:</strong> ${m.text}</p>` : ""}
+
+    ${m.file ? `<p>📄 <a href="${m.file}" target="_blank">${m.file.split('/').pop()}</a></p>` : ""}
+
+    ${m.interview_date ? `<p>📅 Interview Date: ${m.interview_date}</p>` : ""}
+
+    ${m.interview_time ? `<p>⏰ Interview Time: ${m.interview_time}</p>` : ""}
+
+    <p style="font-size:12px; color:gray;">
+        🕒 ${m.full_date} | ${m.time}
+    </p>
+
+</div>
+`;
+
+            chat.innerHTML += msg;
+        });
+
+        chat.scrollTop = chat.scrollHeight;
+    });
+}
+
+setInterval(loadMessages, 2000);
+loadMessages();
+
+
+// 🔥 FILE PREVIEW SCRIPT
+
+let fileInput = document.getElementById("fileUpload");
+let preview = document.getElementById("filePreview");
+
+fileInput.addEventListener("change", function(){
+
+    if(fileInput.files.length > 0){
+        let file = fileInput.files[0];
+
+        preview.innerHTML = `
+            📄 ${file.name}
+            <span class="remove-file" onclick="removeFile()">❌</span>
+        `;
+    }
+});
+
+function removeFile(){
+    fileInput.value = "";
+    preview.innerHTML = "";
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify OTP</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="card">
+    <h2>OTP Verification</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="otp" placeholder="Enter OTP" required>
+        <button type="submit">Verify</button>
+    </form>
+</div>
+
+</body>
+</html>

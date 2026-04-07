@@ -1,0 +1,126 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+
+<style>
+
+/* ===== TITLE ===== */
+.title{
+    font-size:28px;
+    font-weight:bold;
+    color:#2563eb;
+    margin-bottom:25px;
+}
+
+/* ===== SEARCH ===== */
+.search-box{
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:300px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+/* ===== TABLE ===== */
+.table{
+    width:95%;
+    margin:auto;
+    border-collapse:collapse;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.table th{
+    background:#0d2a5e;
+    color:white;
+    padding:14px;
+}
+
+.table td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+.table tr:hover{
+    background:#f1f5f9;
+}
+
+/* ===== BUTTON ===== */
+.delete-btn{
+    background:#ef4444;
+    color:white;
+    padding:7px 14px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+
+</style>
+
+<div class="title">Job Management</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search Job Title...">
+</div>
+
+<!-- TABLE -->
+<table class="table" id="jobTable">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Skills</th>
+        <th>Experience</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+
+    {% for job in jobs %}
+    <tr>
+        <td>{{ job.id }}</td>
+        <td>{{ job.title }}</td>
+        <td>{{ job.company }}</td>
+        <td>{{ job.skills }}</td>
+        <td>{{ job.experience }} yrs</td>
+        <td>{{ job.posted_date }}</td>
+        <td>
+            <a href="{% url 'delete_job' job.id %}">
+                <button class="delete-btn">Delete</button>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let input = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#jobTable tr");
+
+    rows.forEach((row, index) => {
+        if(index === 0) return;
+
+        let title = row.children[1].textContent.toLowerCase();
+
+        if(title.includes(input)){
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+</script>
+
+{% endblock %}

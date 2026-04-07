@@ -1,0 +1,119 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+
+<style>
+
+.title{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+.box{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    width:95%;
+    margin:auto;
+}
+
+.filters{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.filters input, .filters select{
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+.filters button{
+    background:#061e51;
+    color:white;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.filters button:hover{
+    background:#1e40af;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#0d2a5e;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+tr:hover{
+    background:#f1f5f9;
+}
+
+</style>
+
+<h2 class="title">Resume Management</h2>
+
+<div class="box">
+
+<!-- 🔥 ADVANCED FILTER -->
+<form method="GET" class="filters">
+
+    <input type="text" name="search" placeholder="Search name or skill">
+
+    <input type="text" name="skill" placeholder="Skill (Python, Java...)">
+
+    <select name="exp">
+        <option value="">Experience</option>
+        <option value="0">0+</option>
+        <option value="1">1+</option>
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+    </select>
+
+    <button type="submit">Apply</button>
+
+</form>
+
+<table>
+
+<tr>
+<th>Name</th>
+<th>Skills</th>
+<th>Experience</th>
+<th>Score</th>
+</tr>
+
+{% for r in resumes %}
+<tr>
+<td>{{ r.name }}</td>
+<td>{{ r.skills }}</td>
+<td>{{ r.experience }} yrs</td>
+<td>{{ r.experience|add:0|floatformat:0 }}</td>
+</tr>
+{% empty %}
+<tr>
+<td colspan="4">No results found</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

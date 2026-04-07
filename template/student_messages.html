@@ -1,0 +1,137 @@
+{% extends 'base_student.html' %}
+
+{% block content %}
+
+<h2 class="title">Messages</h2>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<div class="chat-container" id="chatBox">
+
+    {% for msg in messages %}
+
+        <div class="message left">
+
+            {% if msg.text %}
+                <p class="msg-text">{{ msg.text }}</p>
+            {% endif %}
+
+            {% if msg.file %}
+                <a href="{{ msg.file.url }}" target="_blank" class="file-link">
+                    📄 {{ msg.file.name }}
+                </a>
+            {% endif %}
+
+            <span class="time">
+                {{ msg.created_at|date:"d M Y" }} | {{ msg.created_at|time:"H:i" }}
+            </span>
+
+        </div>
+
+    {% empty %}
+
+        <p class="no-msg">No messages yet</p>
+
+    {% endfor %}
+
+</div>
+
+<style>
+
+/* TITLE */
+.title{
+text-align:center;
+margin-bottom:20px;
+font-size:26px;
+color:#1e293b;
+}
+
+/* ERROR */
+.error{
+text-align:center;
+color:red;
+margin-bottom:15px;
+}
+
+/* CHAT BOX */
+.chat-container{
+width:65%;
+margin:auto;
+background:#f1f5f9;
+padding:20px;
+height:500px;
+overflow-y:auto;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* MESSAGE BOX */
+.message{
+max-width:65%;
+padding:12px;
+margin:10px 0;
+border-radius:12px;
+position:relative;
+}
+
+/* HR MESSAGE (LEFT SIDE) */
+.left{
+background:#e2e8f0;
+}
+
+/* TEXT */
+.msg-text{
+margin:0;
+font-size:14px;
+}
+
+/* FILE LINK */
+.file-link{
+display:block;
+margin-top:5px;
+color:#2563eb;
+text-decoration:none;
+font-weight:500;
+}
+
+.file-link:hover{
+text-decoration:underline;
+}
+
+/* TIME */
+.time{
+display:block;
+font-size:11px;
+color:#64748b;
+margin-top:6px;
+text-align:right;
+}
+
+/* NO MESSAGE */
+.no-msg{
+text-align:center;
+color:#64748b;
+margin-top:20px;
+}
+
+/* SCROLLBAR */
+.chat-container::-webkit-scrollbar{
+width:6px;
+}
+
+.chat-container::-webkit-scrollbar-thumb{
+background:#cbd5f5;
+border-radius:10px;
+}
+
+</style>
+
+<script>
+/* 🔥 Auto scroll to bottom */
+const chatBox = document.getElementById("chatBox");
+chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<div class="sidebar">
+
+<h2>HireSmart</h2>
+
+<a href="{% url 'student_profile' %}" style="text-decoration:none; color:white;">
+<div class="profile-icon">
+{{ request.session.student_name|slice:":1" }}
+</div>
+</a>
+<a href="{% url 'student_dashboard' %}">Dashboard</a>
+<a href="{% url 'create_resume' %}">Create Resume</a>
+<a href="{% url 'view_resume' %}">View Resume</a>
+<a href="{% url 'edit_resume' %}">Edit Resume</a>
+<a href="{% url 'view_jobs' %}">View Jobs</a>
+<a href="{% url 'logout' %}">Logout</a>
+
+</div>

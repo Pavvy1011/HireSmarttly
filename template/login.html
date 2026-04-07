@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - HIRESMAT</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-100 flex justify-center items-center h-screen">
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-96">
+        <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <input type="email" name="email" placeholder="Email" class="input-box w-full p-2 border rounded mb-4" required>
+
+            <button type="submit" class="btn-primary bg-amber-600 text-white py-2 px-4 rounded w-full hover:bg-amber-700 transition">
+                Send OTP
+            </button>
+        </form>
+
+        <p class="mt-4 text-center text-sm">
+            Don't have an account? 
+            <a href="{% url 'signup' %}" class="text-amber-800 font-semibold hover:underline">Signup</a>
+        </p>
+    </div>
+
+</body>
+</html>

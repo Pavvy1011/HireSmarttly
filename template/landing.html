@@ -1,0 +1,336 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>HireSmart AI</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+body{
+    margin:0;
+    font-family:Arial;
+    background:#eaf4ff;
+    color:#0f172a;
+    overflow-x:hidden;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    background:linear-gradient(to right, #bcd1fd, #3b82f6);
+}
+
+/* CONTAINER */
+.nav-container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 60px;
+}
+
+/* LOGO */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+}
+
+.logo-img{
+    height:45px;
+    width:auto;   /* no stretch */
+}
+
+/* LINKS */
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    font-size:15px;
+    position:relative;
+}
+
+/* BUTTON */
+.nav-btn{
+    background:white;
+    color:#2563eb;
+    padding:8px 18px;
+    border-radius:20px;
+    text-decoration:none;
+    font-weight:bold;
+    white-space:nowrap;
+    transition:0.3s;
+}
+/* 🔥 NAVBAR BOTTOM LINE */
+.navbar::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:3px;
+
+    background:linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+    background-size:200%;
+
+    animation: moveLine 3s linear infinite;
+}
+
+@keyframes moveLine{
+    0%{background-position:0%;}
+    100%{background-position:200%;}
+}
+.navbar{
+    border-bottom: 2px solid #93c5fd;
+}
+.nav-btn:hover{
+    background:#2563eb;
+    color:white;
+}
+
+/* CLICK FIX */
+.nav-links a,
+.nav-btn{
+    position:relative;
+    z-index:2;
+}
+
+/* 🔥 NAVBAR BOTTOM LINE */
+.navbar::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:3px;
+    background:linear-gradient(to right, #2563eb, #3b82f6, #60a5fa);
+    box-shadow:0 0 10px #3b82f6;
+    pointer-events:none;
+}
+
+/* ===== HERO ===== */
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:120px 80px;
+    min-height:100vh;
+}
+
+/* LEFT */
+.hero-left{
+    width:50%;
+}
+
+.hero-left h1{
+    font-size:55px;
+}
+
+.hero-left span{
+    color:#2563eb;
+}
+
+.hero-left p{
+    color:#475569;
+    font-size:18px;
+}
+
+/* RIGHT */
+.hero-right{
+    width:50%;
+    display:flex;
+    justify-content:center;
+}
+
+/* CIRCLE */
+.circle{
+    width:340px;
+    height:340px;
+    border-radius:50%;
+    border:2px dashed rgba(37,99,235,0.4);
+    position:relative;
+    animation: rotate 12s linear infinite;
+}
+
+/* CARD */
+.card{
+    width:140px;
+    height:160px;
+    background:#1e293b;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    border-radius:12px;
+}
+
+/* SCAN */
+.scan{
+    position:absolute;
+    width:80%;
+    height:3px;
+    background:#2563eb;
+    left:10%;
+    border-radius:5px;
+    animation: scan 3s linear infinite;
+}
+
+/* LINES */
+.line{
+    width:60px;
+    height:6px;
+    background:#2563eb;
+    position:absolute;
+    border-radius:5px;
+}
+
+.l1{ top:0; left:50%; transform:translateX(-50%); }
+.l2{ bottom:0; left:50%; transform:translateX(-50%); }
+.l3{ left:0; top:50%; transform:translateY(-50%); }
+.l4{ right:0; top:50%; transform:translateY(-50%); }
+
+/* BADGES */
+.match{
+    position:absolute;
+    right:-60px;
+    top:60px;
+    background:#2563eb;
+    color:white;
+    padding:8px 14px;
+    border-radius:20px;
+}
+
+.keyword{
+    position:absolute;
+    left:-80px;
+    bottom:60px;
+    background:#ef4444;
+    color:white;
+    padding:8px 14px;
+    border-radius:20px;
+}
+
+/* ANIMATION */
+@keyframes rotate{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+@keyframes scan{
+    0%{top:10%;}
+    50%{top:50%;}
+    100%{top:90%;}
+}
+/* ===== ADMIN BUTTON ===== */
+.admin-btn{
+    background:linear-gradient(135deg,#3692e7,#b9caee);
+    color:white;
+    padding:10px 20px;
+    border-radius:25px;
+    font-weight:bold;
+    text-decoration:none;
+    transition:0.3s;
+    position:relative;
+    overflow:hidden;
+}
+
+/* HOVER EFFECT */
+.admin-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(118, 157, 240, 0.4);
+}
+
+/* 🔥 SHINE EFFECT */
+.admin-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,0.4),transparent);
+    transition:0.5s;
+}
+
+.admin-btn:hover::before{
+    left:100%;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-container">
+
+        <div class="logo">
+            <img src="{% static 'images/l.jpg' %}" class="logo-img">
+            HireSmart
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="{% url 'home' %}">Login</a></li>
+        </ul>
+
+<a href="{% url 'admin_login' %}" class="admin-btn">
+    Admin Dashboard
+</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="hero-left">
+        <h1>AI Resume <br> <span>Analyzer</span></h1>
+
+        <p>
+        Upload your resume and let AI scan, analyze,
+        and match you with the best jobs instantly.
+        </p>
+    </div>
+
+    <div class="hero-right">
+
+        <div class="circle">
+
+            <div class="card">Resume</div>
+
+            <div class="scan"></div>
+
+            <div class="line l1"></div>
+            <div class="line l2"></div>
+            <div class="line l3"></div>
+            <div class="line l4"></div>
+
+            <div class="match">98% Match</div>
+            <div class="keyword">Missing Skill</div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

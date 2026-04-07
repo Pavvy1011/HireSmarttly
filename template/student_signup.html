@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Signup</title>
+
+<style>
+
+/* ===== BODY ===== */
+body{
+    margin:0;
+    font-family:Arial;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#e5e7eb;
+}
+
+/* ===== CARD ===== */
+.card{
+    background:white;
+    padding:50px 45px;
+    width:380px;
+    border-radius:20px;
+    text-align:center;
+
+    box-shadow:0 25px 60px rgba(0,0,0,0.18);
+    animation:fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(25px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* ===== TITLE ===== */
+.card h2{
+    margin-bottom:30px;
+    color:#2563eb;
+}
+
+/* ===== INPUT GROUP ===== */
+.input-group{
+    position:relative;
+    margin-bottom:22px;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    outline:none;
+    font-size:14px;
+}
+
+/* LABEL */
+.input-group label{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    background:white;
+    padding:0 5px;
+    color:#777;
+    font-size:13px;
+    transition:0.3s;
+}
+
+/* FOCUS */
+.input-group input:focus + label,
+.input-group input:valid + label{
+    top:-8px;
+    font-size:11px;
+    color:#0d2a5e;
+}
+
+.input-group input:focus{
+    border-color:#0d2a5e;
+    box-shadow:0 0 10px rgba(13,42,94,0.25);
+}
+
+/* ===== PASSWORD ICON ===== */
+.password-wrapper{
+    position:relative;
+}
+
+.password-wrapper span{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+
+/* ===== BUTTON ===== */
+button{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:8px;
+
+    background:#0d2a5e;
+    color:white;
+
+    font-weight:bold;
+    cursor:pointer;
+
+    position:relative;
+    overflow:hidden;
+}
+
+/* RIPPLE */
+button span{
+    position:absolute;
+    border-radius:50%;
+    transform:scale(0);
+    animation:ripple 0.6s linear;
+    background:rgba(255,255,255,0.6);
+}
+
+@keyframes ripple{
+    to{
+        transform:scale(4);
+        opacity:0;
+    }
+}
+
+/* HOVER */
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* ERROR */
+.error{
+    color:red;
+    margin-top:10px;
+    font-size:14px;
+}
+
+/* LINK */
+.link{
+    margin-top:15px;
+}
+
+.link a{
+    color:#2563eb;
+    text-decoration:none;
+}
+
+.link a:hover{
+    text-decoration:underline;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Create Account</h2>
+
+<form method="POST" autocomplete="new-password">
+    {% csrf_token %}
+
+    <!-- hidden autofill blockers -->
+    <input type="text" style="display:none">
+    <input type="password" style="display:none">
+
+    <div class="input-group">
+        <input type="text" name="name" required autocomplete="new-password">
+        <label>Name</label>
+    </div>
+
+    <div class="input-group">
+        <input type="email" name="email" required autocomplete="new-password">
+        <label>Email</label>
+    </div>
+
+    <div class="input-group password-wrapper">
+        <input type="password" id="password" name="password" required autocomplete="new-password">
+        <label>Password</label>
+        <span onclick="togglePassword()">👁️</span>
+    </div>
+
+    <button type="submit" onclick="createRipple(event)">Signup</button>
+
+</form>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<div class="link">
+    <a href="{% url 'student_login' %}">Already have account? Login</a>
+</div>
+
+</div>
+
+<script>
+
+/* SHOW PASSWORD */
+function togglePassword(){
+    const pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+
+/* RIPPLE */
+function createRipple(e){
+    const btn = e.currentTarget;
+
+    const circle = document.createElement("span");
+    const size = Math.max(btn.clientWidth, btn.clientHeight);
+
+    circle.style.width = circle.style.height = size + "px";
+    circle.style.left = e.offsetX - size/2 + "px";
+    circle.style.top = e.offsetY - size/2 + "px";
+
+    btn.appendChild(circle);
+
+    setTimeout(()=>circle.remove(),600);
+}
+
+</script>
+
+</body>
+</html>

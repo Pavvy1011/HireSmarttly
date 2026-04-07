@@ -1,0 +1,158 @@
+{% extends 'base_hr.html' %}
+
+{% block content %}
+
+<style>
+
+/* TITLE */
+.title{
+text-align:center;
+font-size:32px;
+font-weight:bold;
+color:#1e3a8a;
+margin-bottom:25px;
+}
+
+/* FILTER BOX */
+.filter-box{
+text-align:center;
+margin-bottom:25px;
+}
+
+.filter-box select{
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+margin-right:10px;
+}
+
+.filter-box button{
+padding:10px 18px;
+background:#1e3a8a;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.filter-box button:hover{
+background:#0f172a;
+}
+
+/* TABLE */
+.table-container{
+width:95%;
+margin:auto;
+background:white;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+overflow:hidden;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#1e3a8a;
+color:white;
+padding:14px;
+text-align:center;
+font-size:15px;
+}
+
+td{
+padding:12px;
+text-align:center;
+border-top:1px solid #eee;
+}
+
+/* ROW STYLES */
+tr:nth-child(even){
+background:#f8fafc;
+}
+
+tr:hover{
+background:#e0e7ff;
+}
+
+/* MATCH COLOR */
+.match{
+font-weight:bold;
+color:#2563eb;
+}
+
+/* NO DATA */
+.no-data{
+text-align:center;
+color:red;
+padding:20px;
+font-weight:bold;
+}
+
+</style>
+
+<h2 class="title">Approved Students</h2>
+
+<!-- 🔥 FILTER -->
+<form method="GET" class="filter-box">
+
+<select name="job">
+<option value="">All Jobs</option>
+
+{% for job in jobs %}
+<option value="{{ job.title }}"
+{% if request.GET.job == job.title %}selected{% endif %}>
+{{ job.title }}
+</option>
+{% endfor %}
+
+</select>
+
+<button type="submit">Filter</button>
+
+</form>
+
+<div class="table-container">
+
+<table>
+
+<tr>
+<th>Job Title</th>
+<th>Student Name</th>
+<th>Skills</th>
+<th>Experience</th>
+<th>Match %</th>
+</tr>
+
+{% for d in data %}
+
+<tr>
+
+<td>{{ d.job_title }}</td>
+<td>{{ d.student_name }}</td>
+<td>{{ d.skills }}</td>
+<td>{{ d.experience }} Years</td>
+
+<td class="match">
+{{ d.match }}%
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5" class="no-data">
+No Approved Students Found
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

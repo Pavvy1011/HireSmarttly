@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Role</title>
+
+<style>
+
+/* ===== BODY ===== */
+body{
+    margin:0;
+    font-family:Arial;
+    background:#eaf4ff;
+}
+
+/* ===== MAIN (🔥 FIX HERE) ===== */
+.main{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    justify-content:flex-start;   /* center remove */
+    padding-top:180px;            /* 🔥 niche lavva mate */
+}
+
+/* ===== TITLE ===== */
+.title{
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:40px;
+    color:#1e293b;
+    text-align:center;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+    display:flex;
+    gap:40px;
+    justify-content:center;
+}
+
+/* ===== CARD ===== */
+.card{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    text-align:center;
+    width:220px;
+}
+
+/* ===== BOX ===== */
+.box{
+    width:100%;
+    height:100px;
+    background:#5e96f0;
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:130px;
+    cursor:pointer;
+
+    text-decoration:none;
+
+    position:relative;
+    overflow:hidden;
+
+    transition:0.5s;
+}
+
+/* HOVER */
+.box:hover{
+    transform:translateY(-8px) scale(1.05);
+    box-shadow:0 0 25px rgba(13,42,94,0.7),
+               0 0 50px rgba(13,42,94,0.4);
+}
+
+/* SHINE */
+.box::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+}
+
+.box:hover::before{
+    left:100%;
+    transition:0.6s;
+}
+
+/* DESC */
+.desc{
+    margin-top:15px;
+    font-size:14px;
+    color:#555;
+}
+
+/* RIPPLE */
+.box span.ripple{
+    position:absolute;
+    border-radius:50%;
+    transform:scale(0);
+    animation:ripple 0.6s linear;
+    background:rgba(255,255,255,0.6);
+}
+
+@keyframes ripple{
+    to{
+        transform:scale(4);
+        opacity:0;
+    }
+
+
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:linear-gradient(to right, #bcd1fd, #3b82f6);
+    z-index:1000;
+}
+
+/* CONTAINER */
+.nav-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 60px;
+}
+
+/* LOGO */
+.logo{
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+}
+
+/* LINKS */
+.nav-links{
+    list-style:none;
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.nav-links a:hover{
+    opacity:0.8;
+}
+
+/* 🔥 NAVBAR LINE ANIMATION */
+.navbar::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:3px;
+    background:linear-gradient(90deg,#2563eb,#3b82f6,#60a5fa);
+    animation:moveLine 3s linear infinite;
+}
+
+@keyframes moveLine{
+    0%{background-position:0%;}
+    100%{background-position:200%;}
+}
+/* ===== LOGO ===== */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+    letter-spacing:1px;
+}
+
+/* IMAGE */
+.logo-img{
+    height:45px;
+    width:auto;
+    border-radius:8px;   /* 🔥 thodu smooth look */
+}
+
+/* HOVER EFFECT */
+.logo:hover{
+    transform:scale(1.05);
+    transition:0.3s;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="nav-container">
+
+        <div class="logo">
+            <img src="{% static 'images/l.jpg' %}" class="logo-img">
+            HireSmart
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'landing' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+    </div>
+</nav>
+<!-- MAIN -->
+<div class="main">
+
+    <div class="title">Select Your Role</div>
+
+    <div class="container">
+
+        <!-- EMPLOYEE -->
+        <div class="card">
+            <a href="{% url 'student_login' %}" class="box" onclick="createRipple(event)">
+                <h3>I am Employee</h3>
+            </a>
+            <div class="desc">
+                Upload your resume and find jobs that match your skills.
+            </div>
+        </div>
+
+        <!-- HR -->
+        <div class="card">
+            <a href="{% url 'hr_login' %}" class="box" onclick="createRipple(event)">
+                <h3>I am HR</h3>
+            </a>
+            <div class="desc">
+                Post jobs and find the best candidates automatically.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function createRipple(event){
+    const box = event.currentTarget;
+
+    const circle = document.createElement("span");
+    const diameter = Math.max(box.clientWidth, box.clientHeight);
+    const radius = diameter / 2;
+
+    circle.style.width = circle.style.height = diameter + "px";
+    circle.style.left = (event.offsetX - radius) + "px";
+    circle.style.top = (event.offsetY - radius) + "px";
+    circle.classList.add("ripple");
+
+    const ripple = box.getElementsByClassName("ripple")[0];
+    if(ripple){
+        ripple.remove();
+    }
+
+    box.appendChild(circle);
+}
+</script>
+
+</body>
+</html>
