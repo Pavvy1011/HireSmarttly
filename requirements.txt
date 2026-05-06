@@ -3,3 +3,4 @@ gunicorn
 whitenoise
 scikit-learn
 pillow
+openai
