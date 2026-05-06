@@ -1,0 +1,5 @@
+Django
+gunicorn
+whitenoise
+scikit-learn
+pillow
