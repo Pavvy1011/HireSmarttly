@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Contact - HireSmart</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e5e7eb;color:#333;}
+
+/* NAVBAR */
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:white;border-bottom:1px solid #e0e7ff;}
+.nav-logo{font-size:22px;font-weight:600;color:#185FA5;letter-spacing:-0.5px;}
+.nav-links{display:flex;gap:24px;}
+.nav-links a{font-size:14px;color:#6b7280;text-decoration:none;}
+.nav-links a:hover{color:#185FA5;}
+.nav-links a.active{color:#185FA5;font-weight:600;}
+
+/* HERO */
+.hero{padding:60px 40px 90px;background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%);text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:#93c5fd33;border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:180px;height:180px;background:#bfdbfe55;border-radius:50%;}
+.hero-badge{display:inline-block;background:#185FA5;color:#dbeafe;font-size:12px;padding:4px 14px;border-radius:20px;margin-bottom:16px;letter-spacing:0.5px;}
+.hero h1{font-size:44px;font-weight:700;color:#1e3a8a;margin-bottom:10px;line-height:1.2;}
+.hero h1 span{color:#2563eb;}
+.hero p{font-size:16px;color:#1d4ed8;opacity:0.8;}
+
+/* MAIN LAYOUT */
+.container{display:flex;gap:24px;max-width:1060px;margin:-52px auto 60px;padding:0 24px;position:relative;z-index:2;}
+.box{background:white;border-radius:16px;border:1px solid #e0e7ff;padding:28px;flex:1;box-shadow:0 10px 30px rgba(0,0,0,0.08);}
+
+/* FORM BOX */
+.form-box h2{font-size:20px;font-weight:600;color:#1e3a8a;margin-bottom:6px;}
+.form-box>p{font-size:13px;color:#6b7280;margin-bottom:22px;}
+
+/* INFO CHIPS */
+.info-strip{display:flex;gap:10px;margin-bottom:22px;}
+.info-chip{flex:1;background:#f0f4ff;border-radius:10px;padding:12px 10px;display:flex;align-items:center;gap:8px;border:1px solid #e0e7ff;}
+.chip-icon{width:28px;height:28px;border-radius:8px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.chip-text{font-size:11px;color:#6b7280;line-height:1.4;}
+.chip-text strong{display:block;color:#1e3a8a;font-size:12px;font-weight:600;}
+
+/* FORM */
+.row{display:flex;gap:12px;margin-bottom:14px;}
+.field{flex:1;display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:12px;color:#6b7280;font-weight:500;}
+input[type=text],input[type=email],textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;background:#f9fafb;color:#333;font-size:14px;outline:none;font-family:inherit;transition:border-color 0.2s,background 0.2s;}
+input[type=text]:focus,input[type=email]:focus,textarea:focus{border-color:#2563eb;background:white;}
+textarea{height:130px;resize:none;margin-bottom:14px;}
+.btn{width:100%;background:#1d4ed8;color:white;padding:13px;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-size:15px;letter-spacing:0.3px;transition:background 0.2s;}
+.btn:hover{background:#1e3a8a;}
+
+/* CHAT BOX */
+.chat-box{display:flex;flex-direction:column;}
+.chat-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #e0e7ff;}
+.chat-avatar{width:36px;height:36px;border-radius:10px;background:#1d4ed8;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.chat-title{font-size:15px;font-weight:600;color:#1e3a8a;}
+.chat-subtitle{font-size:12px;color:#6b7280;}
+.online-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;margin-left:auto;box-shadow:0 0 0 3px #dcfce7;}
+
+#chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:240px;max-height:280px;padding-right:4px;}
+.bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;max-width:88%;}
+.bubble.bot{background:#f3f4f6;color:#333;border-radius:4px 12px 12px 12px;border:1px solid #e5e7eb;}
+.bubble.user{background:#1d4ed8;color:white;border-radius:12px 4px 12px 12px;align-self:flex-end;margin-left:auto;}
+
+.chat-input-wrap{margin-top:14px;position:relative;}
+#userInput{width:100%;padding:10px 44px 10px 12px;border-radius:12px;border:1px solid #d1d5db;background:#f9fafb;font-size:14px;outline:none;font-family:inherit;transition:border-color 0.2s;}
+#userInput:focus{border-color:#2563eb;background:white;}
+.send-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:#1d4ed8;border:none;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.send-btn:hover{background:#1e3a8a;}
+.send-btn svg{fill:white;width:14px;height:14px;}
+
+/* SUCCESS MESSAGE */
+.success-msg{background:#dcfce7;border:1px solid #86efac;color:#166534;padding:12px 16px;border-radius:10px;font-size:14px;margin-bottom:16px;display:none;}
+
+/* RESPONSIVE */
+@media(max-width:850px){
+  .container{flex-direction:column;margin-top:20px;}
+  .row{flex-direction:column;}
+  .hero{padding-bottom:40px;}
+  .info-strip{flex-direction:column;}
+  .navbar{padding:16px 20px;}
+  .nav-links{gap:16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-logo">HireSmart</div>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Jobs</a>
+    <a href="#">About</a>
+    <a href="#" class="active">Contact</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Get In Touch</div>
+  <h1>Let's start a <span>conversation.</span></h1>
+  <p>Reach out or ask our AI assistant — we're here to help.</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- CONTACT FORM -->
+  <div class="box form-box">
+    <h2>Send a Message</h2>
+    <p>We'll get back to you within 24 hours.</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="success-msg" style="display:block;">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="info-strip">
+
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="field">
+          <label>Your name</label>
+          <input type="text" name="name" placeholder="Name" required>
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" name="email" placeholder="xyz@example.com" required>
+        </div>
+      </div>
+      <div class="field">
+        <label>Message</label>
+        <textarea name="message" placeholder="Write your message here..." required></textarea>
+      </div>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+  </div>
+
+  <!-- CHATBOX -->
+  <div class="box chat-box">
+    <div class="chat-header">
+      <div class="chat-avatar">🤖</div>
+      <div>
+        <div class="chat-title">HireSmart AI</div>
+        <div class="chat-subtitle">Usually replies instantly</div>
+      </div>
+      <div class="online-dot"></div>
+    </div>
+
+    <div id="chat-body">
+      <div class="bubble bot">Hi! I'm your HireSmart AI assistant. How can I help you today?</div>
+    </div>
+
+    <div class="chat-input-wrap">
+      <input type="text" id="userInput" placeholder="Ask something and press Enter...">
+      <button class="send-btn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function sendMsg() {
+  let inp = document.getElementById('userInput');
+  let val = inp.value.trim();
+  if (!val) return;
+
+  let chat = document.getElementById('chat-body');
+
+  // Add user bubble
+  chat.innerHTML += `<div class="bubble user">${val}</div>`;
+  inp.value = '';
+  chat.scrollTop = chat.scrollHeight;
+
+  // Fetch AI reply
+  fetch(`/chatbot/?msg=${encodeURIComponent(val)}`)
+    .then(res => res.json())
+    .then(data => {
+      chat.innerHTML += `<div class="bubble bot">${data.reply}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    })
+    .catch(() => {
+      chat.innerHTML += `<div class="bubble bot">Error connecting to AI.</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    });
+}
+
+document.getElementById('userInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') sendMsg();
+});
+</script>
+
+</body>
+</html>

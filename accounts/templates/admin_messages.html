@@ -1,0 +1,32 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+<h2>📩 Contact Messages</h2>
+
+<div style="background:white; padding:20px; border-radius:12px;">
+
+    {% for m in messages %}
+        <div style="
+            border-bottom:1px solid #eee;
+            padding:12px 0;
+        ">
+            <div style="display:flex; justify-content:space-between;">
+                <strong>{{ m.name }}</strong>
+                <small>{{ m.created_at|date:"d M Y H:i" }}</small>
+            </div>
+
+            <div style="color:#64748b; font-size:13px;">
+                {{ m.email }}
+            </div>
+
+            <div style="margin-top:5px;">
+                {{ m.message }}
+            </div>
+        </div>
+    {% empty %}
+        <p>No messages yet</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

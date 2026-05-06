@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>HireSmart</title>
+
+<style>
+
+/* ===== NAVBAR ===== */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:linear-gradient(to right, #bcd1fd, #3b82f6);
+    z-index:1000;
+}
+
+.nav-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 60px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:white;
+    font-weight:bold;
+}
+
+.logo-img{
+    height:40px;
+}
+
+.nav-links{
+    display:flex;
+    gap:30px;
+    list-style:none;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+}
+
+.nav-btn{
+    background:white;
+    color:#2563eb;
+    padding:8px 18px;
+    border-radius:20px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* LINE */
+.navbar::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:3px;
+    background:#60a5fa;
+    pointer-events:none;
+}
+
+/* CONTENT SPACE */
+.content{
+    margin-top:80px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-container">
+
+        <div class="logo">
+            <img src="{% static 'images/l.jpg' %}" class="logo-img">
+            HireSmart
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="{% url 'home' %}">Login</a></li>
+        </ul>
+
+        <a href="{% url 'admin_dashboard' %}" class="nav-btn">Admin Dashboard</a>
+
+    </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Login</title>
+
+<style>
+
+/* ===== BODY ===== */
+body{
+    margin:0;
+    font-family:Arial;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#eaf4ff;
+}
+
+/* ===== CARD ===== */
+.card{
+    background:white;
+    padding:50px 45px;
+    width:380px;
+    border-radius:20px;
+    text-align:center;
+
+    box-shadow:0 25px 60px rgba(0,0,0,0.18);
+    animation:fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(25px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* ===== TITLE ===== */
+.card h2{
+    margin-bottom:30px;
+    color:#2563eb;
+}
+
+/* ===== FLOATING INPUT ===== */
+.input-group{
+    position:relative;
+    margin-bottom:22px;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    outline:none;
+    font-size:14px;
+}
+
+/* label */
+.input-group label{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    background:white;
+    padding:0 5px;
+    color:#777;
+    font-size:13px;
+    transition:0.3s;
+}
+
+/* focus */
+.input-group input:focus + label,
+.input-group input:valid + label{
+    top:-8px;
+    font-size:11px;
+    color:#0d2a5e;
+}
+
+.input-group input:focus{
+    border-color:#0d2a5e;
+    box-shadow:0 0 10px rgba(13,42,94,0.25);
+}
+
+/* ===== PASSWORD ICON ===== */
+.password-wrapper{
+    position:relative;
+}
+
+.password-wrapper span{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+
+/* ===== BUTTON ===== */
+button{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:8px;
+   background:#5e96f0;
+    color:white;
+
+    font-weight:bold;
+    cursor:pointer;
+
+    position:relative;
+    overflow:hidden;
+}
+
+/* ripple */
+button span{
+    position:absolute;
+    border-radius:50%;
+    transform:scale(0);
+    animation:ripple 0.6s linear;
+    background:rgba(255,255,255,0.6);
+}
+
+@keyframes ripple{
+    to{
+        transform:scale(4);
+        opacity:0;
+    }
+}
+
+/* hover */
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* ===== ERROR ===== */
+.error{
+    color:red;
+    margin-top:10px;
+    font-size:14px;
+}
+
+/* ===== LINKS ===== */
+.links{
+    margin-top:15px;
+}
+
+.links a{
+    display:block;
+    margin-top:8px;
+    color:#2563eb;
+    text-decoration:none;
+}
+
+.links a:hover{
+    text-decoration:underline;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:linear-gradient(to right, #bcd1fd, #3b82f6);
+    z-index:1000;
+}
+
+/* CONTAINER */
+.nav-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 60px;
+}
+
+/* LOGO */
+.logo{
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+}
+
+/* LINKS */
+.nav-links{
+    list-style:none;
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.nav-links a:hover{
+    opacity:0.8;
+}
+
+/* 🔥 NAVBAR LINE ANIMATION */
+.navbar::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:3px;
+    background:linear-gradient(90deg,#2563eb,#3b82f6,#60a5fa);
+    animation:moveLine 3s linear infinite;
+}
+
+@keyframes moveLine{
+    0%{background-position:0%;}
+    100%{background-position:200%;}
+}
+/* ===== LOGO ===== */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+    letter-spacing:1px;
+}
+
+/* IMAGE */
+.logo-img{
+    height:45px;
+    width:auto;
+    border-radius:8px;   /* 🔥 thodu smooth look */
+}
+
+/* HOVER EFFECT */
+.logo:hover{
+    transform:scale(1.05);
+    transition:0.3s;
+}
+</style>
+
+</head>
+
+<body>
+    <!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <img src="{% static 'images/l.jpg' %}" class="logo-img">
+            HireSmart
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'landing' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+<div class="card">
+
+<h2>Student Login</h2>
+
+<form method="POST" autocomplete="new-password">
+    {% csrf_token %}
+
+    <!-- hidden fields to block autofill -->
+    <input type="text" style="display:none">
+    <input type="password" style="display:none">
+
+    <div class="input-group">
+        <input type="email" name="email" required autocomplete="new-password">
+        <label>Email</label>
+    </div>
+
+    <div class="input-group password-wrapper">
+        <input type="password" id="password" name="password" required autocomplete="new-password">
+        <label>Password</label>
+        <span onclick="togglePassword()">👁️</span>
+    </div>
+
+    <button type="submit" onclick="createRipple(event)">Login</button>
+
+</form>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<div class="links">
+    <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+    <a href="{% url 'student_signup' %}">Create New Account</a>
+</div>
+
+</div>
+
+<script>
+
+/* SHOW PASSWORD */
+function togglePassword(){
+    const pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+
+/* RIPPLE */
+function createRipple(e){
+    const btn = e.currentTarget;
+
+    const circle = document.createElement("span");
+    const size = Math.max(btn.clientWidth, btn.clientHeight);
+
+    circle.style.width = circle.style.height = size + "px";
+    circle.style.left = e.offsetX - size/2 + "px";
+    circle.style.top = e.offsetY - size/2 + "px";
+
+    btn.appendChild(circle);
+
+    setTimeout(()=>circle.remove(),600);
+}
+
+</script>
+
+</body>
+<script>
+window.history.pushState(null, null, window.location.href);
+window.onpopstate = function () {
+    window.location.href = "{% url 'landing' %}";
+};
+</script>
+</html>

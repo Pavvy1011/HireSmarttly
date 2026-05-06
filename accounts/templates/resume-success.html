@@ -1,0 +1,10 @@
+<h2>Upload Resume</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    Upload Resume (PDF/DOC):
+    <input type="file" name="resume_file"><br><br>
+
+    <button type="submit">Upload</button>
+</form>

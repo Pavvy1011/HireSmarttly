@@ -1,0 +1,329 @@
+{% extends 'base_hr.html' %}
+{% block content %}
+
+<style>
+.page-wrapper{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:30px;
+}
+
+.form-card{
+    width:500px;
+    background:#fff;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    margin-bottom:35px;
+}
+
+.form-card h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:25px;
+    font-size:22px;
+}
+
+.form-card input,
+.form-card textarea{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+}
+
+.form-card textarea{
+    height:120px;
+    resize:none;
+}
+
+.form-card button{
+    width:100%;
+    background:#0b2c68;
+    color:white;
+    border:none;
+    padding:12px;
+    font-size:18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.form-card button:hover{
+    background:#163d86;
+}
+
+.job-list-box{
+    width:95%;
+    background:#fff;
+    border-radius:15px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.12);
+    padding:20px;
+}
+
+.job-list-box h3{
+    text-align:center;
+    margin-bottom:20px;
+    color:#0b2c68;
+    font-size:24px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#0b2c68;
+    color:white;
+    padding:12px;
+    text-align:center;
+}
+
+td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+tr:nth-child(even){
+    background:#f8fafc;
+}
+
+.btn-update,
+.btn-delete{
+    padding:8px 16px;
+    border:none;
+    border-radius:6px;
+    color:white;
+    cursor:pointer;
+    font-size:14px;
+    margin:2px;
+}
+
+.btn-update{
+    background:#2563eb;
+}
+
+.btn-update:hover{
+    background:#1d4ed8;
+}
+
+.btn-delete{
+    background:#dc2626;
+}
+
+.btn-delete:hover{
+    background:#b91c1c;
+}
+
+/* Modal */
+.modal{
+    display:none;
+    position:fixed;
+    z-index:9999;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+}
+
+.modal-content{
+    background:#fff;
+    width:500px;
+    margin:5% auto;
+    padding:25px;
+    border-radius:15px;
+    position:relative;
+}
+
+.modal-content h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+.modal-content input,
+.modal-content textarea{
+    width:100%;
+    padding:12px;
+    margin-bottom:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.modal-content textarea{
+    height:110px;
+    resize:none;
+}
+
+.close{
+    position:absolute;
+    right:18px;
+    top:10px;
+    font-size:28px;
+    cursor:pointer;
+    color:#333;
+}
+
+.save-btn{
+    width:100%;
+    background:#0b2c68;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* Success Dialog */
+.alert-box{
+    display:none;
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#16a34a;
+    color:white;
+    padding:14px 22px;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    z-index:10000;
+    font-size:16px;
+}
+</style>
+
+<div class="alert-box" id="alertBox"></div>
+
+<div class="page-wrapper">
+
+    <div class="form-card">
+        <h2>Post Job</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Job Title" required>
+            <input type="text" name="company" placeholder="Company" required>
+            <input type="text" name="skills" placeholder="Required Skills" required>
+            <input type="number" name="experience" placeholder="Experience" required>
+            <textarea name="description" placeholder="Job Description" required></textarea>
+            <button type="submit">Post Job</button>
+        </form>
+    </div>
+
+    <div class="job-list-box">
+        <h3>Posted Jobs List</h3>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Skills</th>
+                <th>Experience</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job.id }}</td>
+                <td>{{ job.title }}</td>
+                <td>{{ job.company }}</td>
+                <td>{{ job.skills }}</td>
+                <td>{{ job.experience }} Years</td>
+                <td>{{ job.description }}</td>
+                <td>
+                    <button class="btn-update"
+                        onclick="openUpdateModal('{{ job.id }}', '{{ job.title|escapejs }}', '{{ job.company|escapejs }}', '{{ job.skills|escapejs }}', '{{ job.experience }}', '{{ job.description|escapejs }}')">
+                        Update
+                    </button>
+
+                    <a href="{% url 'delete_job' job.id %}" onclick="return confirmDelete();">
+                        <button type="button" class="btn-delete">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No jobs posted yet.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- Update Modal -->
+<div id="updateModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeUpdateModal()">&times;</span>
+        <h2>Update Job</h2>
+
+        <form id="updateForm" method="POST">
+            {% csrf_token %}
+            <input type="text" name="title" id="updateTitle" required>
+            <input type="text" name="company" id="updateCompany" required>
+            <input type="text" name="skills" id="updateSkills" required>
+            <input type="number" name="experience" id="updateExperience" required>
+            <textarea name="description" id="updateDescription" required></textarea>
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openUpdateModal(id, title, company, skills, experience, description){
+    document.getElementById("updateTitle").value = title;
+    document.getElementById("updateCompany").value = company;
+    document.getElementById("updateSkills").value = skills;
+    document.getElementById("updateExperience").value = experience;
+    document.getElementById("updateDescription").value = description;
+    document.getElementById("updateForm").action = "/update-job/" + id + "/";
+    document.getElementById("updateModal").style.display = "block";
+}
+
+function closeUpdateModal(){
+    document.getElementById("updateModal").style.display = "none";
+}
+
+window.onclick = function(event){
+    let modal = document.getElementById("updateModal");
+    if(event.target == modal){
+        modal.style.display = "none";
+    }
+}
+
+function confirmDelete(){
+    return confirm("Are you sure you want to delete this job?");
+}
+
+window.onload = function(){
+    const params = new URLSearchParams(window.location.search);
+    const alertBox = document.getElementById("alertBox");
+
+    if(params.get("posted") === "1"){
+        alertBox.innerText = "Job posted successfully!";
+        alertBox.style.display = "block";
+    }
+    else if(params.get("updated") === "1"){
+        alertBox.innerText = "Job updated successfully!";
+        alertBox.style.display = "block";
+    }
+    else if(params.get("deleted") === "1"){
+        alertBox.innerText = "Job deleted successfully!";
+        alertBox.style.display = "block";
+    }
+
+    if(alertBox.style.display === "block"){
+        setTimeout(() => {
+            alertBox.style.display = "none";
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 2500);
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base_student.html' %}
+
+{% block content %}
+
+<h2>Available Jobs</h2>
+
+<div class="table-container">
+
+<table class="jobs-table">
+
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Company</th>
+<th>Skills</th>
+<th>Experience</th>
+<th>Apply</th>
+</tr>
+
+{% for job in jobs %}
+
+<tr>
+
+<td>{{ job.id }}</td>
+<td>{{ job.title }}</td>
+<td>{{ job.company }}</td>
+<td>{{ job.skills }}</td>
+<td>{{ job.experience }}</td>
+
+<td>
+<form method="POST" action="{% url 'apply_job' job.id %}">
+{% csrf_token %}
+<button type="submit" class="apply-btn">Apply</button>
+</form>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<style>
+
+/* Table container */
+
+.table-container{
+margin-top:20px;
+}
+
+/* Table */
+
+.jobs-table{
+width:90%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 6px 20px rgba(0,0,0,0.1);
+}
+
+/* Header */
+
+.jobs-table th{
+background:#1f2f46;
+color:white;
+padding:14px;
+text-align:center;
+}
+
+/* Table cells */
+
+.jobs-table td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+/* Row hover */
+
+.jobs-table tr:hover{
+background:#f5f7fb;
+}
+
+/* Apply button */
+
+.apply-btn{
+background:#1f2f46;
+color:white;
+border:none;
+padding:8px 18px;
+border-radius:6px;
+cursor:pointer;
+font-weight:600;
+}
+
+.apply-btn:hover{
+background:#0d1b2e;
+}
+
+</style>
+
+{% endblock %}

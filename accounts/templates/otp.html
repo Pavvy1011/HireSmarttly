@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-100 flex justify-center items-center h-screen">
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center">
+        <h2 class="text-xl font-bold mb-6">Enter OTP</h2>
+
+        <form method="POST" action="{% url 'otp_verify' email=email %}">
+            {% csrf_token %}
+
+            <input type="hidden" name="email" value="{{ email }}">
+
+            <input type="text" name="otp" maxlength="6"
+                   placeholder="Enter OTP"
+                   class="input-box text-center w-full p-2 border rounded mb-4"
+                   required><br>
+
+            <button type="submit" class="btn-primary bg-amber-600 text-white py-2 px-4 rounded w-full hover:bg-amber-700 transition">
+                Verify
+            </button>
+        </form>
+
+        {% if error %}
+            <p class="text-red-500 mt-3">{{ error }}</p>
+        {% endif %}
+
+        <p class="mt-4 text-sm">
+            Didn't receive OTP? 
+            <a href="{% url 'resend_otp' email=email %}" class="text-amber-800 font-semibold hover:underline">Resend OTP</a>
+        </p>
+    </div>
+
+</body>
+</html>
